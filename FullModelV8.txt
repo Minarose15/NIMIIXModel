@@ -1,0 +1,265 @@
+-- geometry of ion source (electrode 1), beam energy flange (electrode 2), and extraction plate (electrode 3)
+-- based off example einzel2.gem
+
+
+pa_define{1250,611,121,"p", "z", "e", surface = "fractional"} --no longer scaled to size of NIMIIX FIX LATER
+--1193,641
+
+bendLocation = 588
+
+locate(,120){
+
+-- Ion Source
+
+e(1){
+    rotate_fill(360)                        
+        { box(0,0, 11,63.5) }
+}
+
+e(1){
+locate(11)                
+    {rotate_fill(360)                        
+        { box(0,15, 2,63.5) }
+}}
+
+e(1){
+locate(11)               
+    {rotate_fill(360)
+	{ box(0,15, 67,25) } 
+}}
+
+e(1){
+locate(13)           
+    { rotate_fill(360)
+	{ box(0,53.5, 75.5,63.5) }
+}}
+
+-- Intermediate Electrode
+
+e(2){
+locate(67+11)                
+    { rotate_fill(360)
+	{ polyline(0,16, 0,34, 17.5,1.5, 8,1.5)  }
+}}
+
+e(1){
+      rotate_fill(360)
+	{ box(72,24, 83,54) }  
+}
+
+-- Beam Energy Flange
+
+e(1){
+locate(102)                
+    { rotate_fill(360)
+	{ box(0,3, 2,81.6) }
+}}
+
+e(1){
+locate(102)              
+    { rotate_fill(360)
+	{ polyline(2,8.166, 2,81.6, 17,81.6, 17,21) }
+}}
+
+-- Extraction Plate
+
+locate(105){
+-- cylinder
+e(3){
+locate(13+10)         
+    { rotate_fill(360)
+	{ box(0,45, 40.5,56) }
+}}
+
+-- cone
+e(3){   
+     rotate_fill(360)
+	{ polyline(0,1.75, 0.5,7, 23,29, 29,26, 6.5,4) }      
+}
+
+-- connector
+e(3){
+locate(13+10)      
+    { rotate_fill(360)
+	{ box(0,26, 6, 46) }
+}}
+
+}
+
+-- Rough housing for components
+e(3){
+      rotate_fill(360)
+	{ box(163,102,bendLocation,110) }
+}
+ 
+-- Lens 1
+locate(168.5+76){
+e(3){
+     rotate_fill(360)
+	{ box(0,32.5, 44.1,38.5) }
+}
+
+e(3){
+     rotate_fill(360)
+	{ box(0,0, 1,32.5) }
+}
+
+e(4){
+locate(44.1+7.9)                
+    { rotate_fill(360)
+	{ box(0,32.5, 54.1,38.5) }
+}}
+
+e(3){
+locate(44.1+7.9+54.1+7.9)                
+    { rotate_fill(360)
+	{ box(0,32.5, 54.2,38.5) }
+}}
+
+e(3){
+locate(44.1+7.9+54.1+7.9)                
+    { rotate_fill(360)
+	{ box(53.2,0, 54.2,32.5) }
+}}
+}
+
+-- Cylindrical Deflector
+
+local centralR = 150
+local r1 = centralR-25
+local inner1 = r1-1
+local inner2 = centralR+25
+local r2 = inner2+1
+
+locate(bendLocation-45,centralR,0){
+e(5)
+{
+	within{
+
+	cylinder3d(0,0,0, 0,0,117, r1)
+	box3d(0,-r1,-r1, r1,0,r1)
+	box3d(0,-r2,-117,174,0,117)}
+	notin{
+	locate(,,,,,30){
+	box3d(0,-r1,-2*r1, r1, 0,2*r1)
+}
+}
+	notin{cylinder3d(0,0,-1, 0,0,118, inner1)}
+}
+
+e(6)
+{
+	within{
+
+	cylinder3d(0,0,0, 0,0,117, r2)
+	box3d(0,-r2,-r2, r2,0,r2)
+	box3d(0,-r2,-117,174,0,117)}
+	notin{
+	locate(,,,,,30){
+	box3d(0,-r2,-2*r2, r2, 0,2*r2)
+}
+}
+
+	notin{cylinder3d(0,0,-1, 0,0,118, inner2)}
+
+}
+
+e(3)
+{
+   within{ box3d(0,-r2-10,0, 174,-240,-1) }
+   notin{ box3d(-0.1,-r2,10,174.1,-250,-1) }
+}
+
+}
+
+-- The bend
+locate(bendLocation,,,1,,30){
+
+locate(-bendLocation){
+
+-- The housing
+
+e(3){
+      rotate_fill(360)
+	{ box(bendLocation,102,748,110) }
+}
+
+e(7){
+     rotate_fill(360)
+	{ box(759, 102, 1204, 110) }
+}
+
+e(7){
+     rotate_fill(360)
+	{ box(761, 55.5, 728, 58) }
+}
+
+-- Decel Grid 1
+e(3){
+locate(748){
+	rotate_fill(360)
+	{ box(0,0, 1,101.6) }
+}}
+	
+-- HV electrode side 1
+e(3){
+locate(732){
+	rotate_fill(360){ box(0,32, 16,51) }
+}}
+
+-- Decel Grid 2
+locate(758){  
+e(7){
+	rotate_fill(360)
+	{ box(0,0, 1,101.6) }
+}}
+
+-- HV electrode side 2
+e(7){
+locate(758){
+	rotate_fill(360){ box(0,32, 16,51) }
+}}
+		
+-- Lens 2
+locate(940){
+locate(,,,1.7){
+e(7){
+     rotate_fill(360)
+	{ box(0,32.5, 44.1,38.5) }
+}
+
+e(7){
+     rotate_fill(360)
+	{ box(0,0, 0.6,32.5) }
+}
+
+e(8){
+locate(44.1+7.9)                
+    { rotate_fill(360)
+	{ box(0,32.5, 54.1,38.5) }
+}}
+
+e(7){
+locate(44.1+7.9+54.1+7.9)                
+    { rotate_fill(360)
+	{ box(0,32.5, 54.2,38.5) }
+}}
+
+e(7){
+locate(44.1+7.9+54.1+7.9)                
+    { rotate_fill(360)
+	{ box(53.6,0, 54.2,32.5) } 
+}}
+
+}
+
+-- The target
+locate(187+44.1+7.9+54.1+7.9+54.2){
+e(7){
+	rotate_fill(360)
+	{ box(0,0, 5,3) }
+}}
+
+}
+}
+}}
